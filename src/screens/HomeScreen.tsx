@@ -18,34 +18,40 @@ export const HomeScreen = () => {
         style={styles.pokebolaBG}
       />
 
-      <FlatList 
-        //data
-        data={simplePokemonList}
-        keyExtractor = { (pokemon) => pokemon.id  }
-        renderItem = {({ item, index }) => ( <PokemonCard pokemon={ item }/> )}
-        numColumns= {2}
-        ListHeaderComponent={(
-          <Text style={{ 
-            ...styles.title, 
-            ...styles.globalMargin,
-            top: top + 20,
-            marginBottom: top + 20 
-          }}>
-            Pokedex
-          </Text>
-        )}
+      <View style={{
+        ...styles.globalMargin,
+        alignItems:'center'
+      }}>
+        <FlatList 
+          //data
+          data={simplePokemonList}
+          keyExtractor = { (pokemon) => pokemon.id  }
+          renderItem = {({ item, index }) => ( <PokemonCard pokemon={ item }/> )}
+          numColumns= {2}
+          ListHeaderComponent={(
+            <Text style={{ 
+              ...styles.title, 
+              ...styles.globalMargin,
+              top: top + 20,
+              marginBottom: top + 20,
+              paddingBottom: 10 
+            }}>
+              Pokedex
+            </Text>
+          )}
 
-        //infinite scroll
-        onEndReached = { loadPokemons }
-        onEndReachedThreshold = { 0.4 }
+          //infinite scroll
+          onEndReached = { loadPokemons }
+          onEndReachedThreshold = { 0.4 }
 
-        //loading
-        ListFooterComponent= { <ActivityIndicator size={20} color='gray' style={{ height: 100 }} /> }
+          //loading
+          ListFooterComponent= { <ActivityIndicator size={20} color='gray' style={{ height: 100 }} /> }
 
-        //Indicator
-        showsVerticalScrollIndicator={false}
+          //Indicator
+          showsVerticalScrollIndicator={false}
 
-      />
+        />
+      </View>
     </>
   );
 };
