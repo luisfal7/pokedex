@@ -3,6 +3,8 @@ import { Text, View, Image, FlatList, ScrollView, ActivityIndicator } from "reac
 import { styles } from "../theme/AppTheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePokemonPaginated } from '../hooks/usePokemonPaginated';
+import { FadeInImage } from '../components/FadeInImage';
+import { PokemonCard } from "../components/PokemonCard";
 
 export const HomeScreen = () => {
   const { top } = useSafeAreaInsets();
@@ -11,13 +13,6 @@ export const HomeScreen = () => {
 
   return (
     <>
-      <Text style={{ 
-        ...styles.title, 
-        ...styles.globalMargin,
-        top: top + 20, 
-      }}>
-        Pokedex
-      </Text>
       <Image
         source={require("../assets/pokebola.png")}
         style={styles.pokebolaBG}
@@ -27,15 +22,18 @@ export const HomeScreen = () => {
         //data
         data={simplePokemonList}
         keyExtractor = { (pokemon) => pokemon.id  }
-        renderItem = {({ item, index }) => (
-            <Image 
-              source={{ uri: item.picture }}
-              style={{
-                width: 150,
-                height: 150
-              }}
-            />
-          )}
+        renderItem = {({ item, index }) => ( <PokemonCard pokemon={ item }/> )}
+        numColumns= {2}
+        ListHeaderComponent={(
+          <Text style={{ 
+            ...styles.title, 
+            ...styles.globalMargin,
+            top: top + 20,
+            marginBottom: top + 20 
+          }}>
+            Pokedex
+          </Text>
+        )}
 
         //infinite scroll
         onEndReached = { loadPokemons }
