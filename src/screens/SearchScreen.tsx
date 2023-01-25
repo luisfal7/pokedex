@@ -26,6 +26,7 @@ export const SearchScreen = () => {
       <SearchInput 
         style={{
           position: "absolute",
+          opacity:0.92,
           zIndex: 999,
           width: screenWidth - 40,
           top: top + 10
