@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import ImageColors from 'react-native-image-colors'
 import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SimplePokemon } from '../interfaces/PokemonInterfaces'
+import { SimplePokemon } from '../interfaces/PokemonInterfaces';
 import { FadeInImage } from './FadeInImage';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width
 
@@ -11,12 +13,52 @@ interface Props {
 }
 
 export const PokemonCard = ( {pokemon}: Props ) => {
+
+    const [bgColor, setBgColor] = useState('grey')
+    const isMounted = useRef(true)
+    const navigation = useNavigation()
+
+    useEffect(() => {
+
+        if( !isMounted.current ) return
+
+        ImageColors.getColors(pokemon.picture, {
+            fallback: 'grey',
+          }).then( colors => {
+
+            switch (colors.platform) {
+                case 'android':
+                  // android result properties
+                  setBgColor(colors.dominant || 'grey') 
+                  break
+                case 'web':
+                  // web result properties
+                  setBgColor(colors.dominant || 'grey') 
+                  break
+                case 'ios':
+                  // iOS result properties
+                  setBgColor(colors.background || 'grey')
+                  break
+                default:
+                  throw new Error('Unexpected platform key')
+              }
+          })
+
+          return () => {
+            isMounted.current = false
+          }
+      
+    }, [])
+    
+
   return (
     <TouchableOpacity
         activeOpacity={0.7}
+        onPress={()=>navigation.navigate('PokemonScreen', { SimplePokemon: pokemon })}
     >
         <View style={{
             ...styles.cardContainer,
+            backgroundColor: bgColor,
              width: windowWidth * 0.4
         }}>
             <View style={{ flexDirection:'column' }}>                
