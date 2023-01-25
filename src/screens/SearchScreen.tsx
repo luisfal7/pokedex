@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Loading } from "../components/Loading";
@@ -13,21 +13,28 @@ const screenWidth = Dimensions.get("window").width;
 export const SearchScreen = () => {
   const { top } = useSafeAreaInsets();
   const { isFetching, simplePokemonList } = usePokemonSearch();
-  const [term, setTerm] = useState('')
-  const [pokemonFiltered, setPokemonFiltered] = useState<SimplePokemon[]>([])
+  const [term, setTerm] = useState("");
+  const [pokemonFiltered, setPokemonFiltered] = useState<SimplePokemon[]>([]);
 
   useEffect(() => {
-    
-    if( term.length === 0 ){
-      return setPokemonFiltered([])
+    if (term.length === 0) {
+      return setPokemonFiltered([]);
     }
 
-    setPokemonFiltered(
-      simplePokemonList.filter( poke => poke.name.toLowerCase().includes( term.toLowerCase() ) )
-    )
+    if(isNaN(Number(term))){
+      setPokemonFiltered(
+        simplePokemonList.filter((poke) =>
+          poke.name.toLowerCase().includes(term.toLowerCase())
+        )
+      )
+    }else{
+      const pokemonId = simplePokemonList.find((poke) => poke.id === term)
+      setPokemonFiltered(
+        pokemonId ? [pokemonId] : []
+      )
+    }
 
-  }, [term])
-  
+  }, [term]);
 
   if (isFetching) {
     return <Loading />;
@@ -36,7 +43,7 @@ export const SearchScreen = () => {
   return (
     <View style={{ flex: 1, marginTop: top + 10, marginHorizontal: 20 }}>
       <SearchInput
-        onDebounce = { (value) => setTerm(value) }
+        onDebounce={(value) => setTerm(value)}
         style={{
           position: "absolute",
           opacity: 0.92,
@@ -62,7 +69,7 @@ export const SearchScreen = () => {
               marginTop: top + 40,
             }}
           >
-            { term }
+            {term}
           </Text>
         }
         //Indicator
