@@ -1,10 +1,14 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextInput } from 'react-native'
+import { View, StyleSheet, TextInput, StyleProp, ViewStyle } from 'react-native';
 import Icon from "@expo/vector-icons/Ionicons";
 
-export const SearchInput = () => {
+interface Props {
+    style?: StyleProp<ViewStyle>
+}
+
+export const SearchInput = ({ style }: Props) => {
   return (
-    <View style={ styles.container }>
+    <View style={{ ...styles.container, ...style as any }}>
         <View style={ styles.textBackgroud }>
             <TextInput 
             placeholder='Buscar pokémon'
